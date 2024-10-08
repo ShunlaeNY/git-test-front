@@ -17,24 +17,16 @@ import {
 function App() {
   return (
     <Router>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/students">Students</Link>
-        </li>
-        <li>
-          <Link to="/register">Register</Link>
-        </li>
-        <li>
-          <Link to="/hello">Hello</Link>
-        </li>
-      </ul>
+      <div className="link-container">
+        <a href="/">Home</a>
+        <a href="/students">StudentList</a>
+        <a href="/register">Student Register</a>
+      </div>
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/students" element={<StudentList />}></Route>
         <Route path="/register" element={<StudentReg />}></Route>
+        <Route path="/register/:id" element={<StudentReg />}></Route>
         <Route path="/hello" element={<Hello />}></Route>
       </Routes>
     </Router>

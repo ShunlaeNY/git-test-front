@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 export default function StudentReg() {
   const [formData, setFormData] = useState({
     name: "",
@@ -8,6 +9,22 @@ export default function StudentReg() {
     phonenumber: "",
     address: "",
   });
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Fetch student data if id is provided
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:1818/student/edit/${id}`)
+        .then((response) => {
+          setFormData(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching student:", error);
+        });
+    }
+  }, [id]);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -23,6 +40,18 @@ export default function StudentReg() {
     e.preventDefault();
     console.log("Form Submitted:", formData);
     // Add your form submission logic here, like sending data to an API
+    const url = id
+      ? `http://localhost:1818/student/edit/${id}`
+      : "http://localhost:1818/student/add";
+    const method = id ? "put" : "post";
+    axios[method](url, formData)
+      .then((response) => {
+        console.log("Student added successfully:", response.data);
+        navigate("/students");
+      })
+      .catch((error) => {
+        console.error("Error adding student:", error);
+      });
   };
 
   // Handle form clear/reset
@@ -37,8 +66,8 @@ export default function StudentReg() {
   };
 
   return (
-    <div>
-      <h1>Student Registration Form</h1>
+    <div className="form-container">
+      <h1>{id ? "Student Update Form" : "Student Registration Form"}</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
@@ -93,9 +122,15 @@ export default function StudentReg() {
             required
           />
         </div>
-        <div>
-          <button type="submit">Register</button>
-          <button type="button" onClick={handleClear}>
+        <div className="btn-container">
+          <button type="submit" className="btn">
+            {id ? "Update" : "Register"}
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="btn delete-btn"
+          >
             Clear
           </button>
         </div>

@@ -1,39 +1,33 @@
-import React from "react";
-const studentList = [
-  {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    gender: "Male",
-    phone: "1234567890",
-    address: "123 Main St, City, State, Zip",
-  },
-  {
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    gender: "Female",
-    phone: "0987654321",
-    address: "456 Elm St, City, State, Zip",
-  },
-  {
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    gender: "Female",
-    phone: "9876543210",
-    address: "789 Oak St, City, State, Zip",
-  },
-];
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function StudentList() {
+  const [studentList, setStudentList] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get("http://localhost:1818/student/list")
+      .then((response) => setStudentList(response.data)) // Correctly use response.data
+      .catch((error) => console.log(error)); // Handle error if needed
+  }, []);
+  const handleEdit = (id) => {
+    console.log("Edit clicked for student with id:", id);
+    navigate(`/register/${id}`);
+  };
+
   return (
-    <div>
+    <div className="form-container">
       <h2>Student List</h2>
-      <Table studentList={studentList} />
+      {console.log(studentList)}
+      <Table studentList={studentList} handleEdit={handleEdit} />
     </div>
   );
 }
-function Table({ studentList }) {
+
+function Table({ studentList, handleEdit }) {
   return (
-    // console.log(studentList);
-    <table border={1}>
+    <table className="table">
       <thead>
         <tr>
           <th>No.</th>
@@ -52,16 +46,26 @@ function Table({ studentList }) {
             <td>{student.name}</td>
             <td>{student.email}</td>
             <td>{student.gender}</td>
-            <td>{student.phone}</td>
+            <td>{student.phonenumber}</td>
             <td>{student.address}</td>
             <td>
-              <button>Edit</button>
-              <button>Delete</button>
+              <div className="btn-container">
+                <button
+                  className="icon-btn"
+                  onClick={() => {
+                    handleEdit(student.id);
+                  }}
+                >
+                  <i class="fa-solid fa-user-pen"></i>
+                </button>
+                <button className="icon-btn">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
         ))}
       </tbody>
-      <tfoot></tfoot>
     </table>
   );
 }
