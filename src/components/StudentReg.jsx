@@ -16,7 +16,7 @@ export default function StudentReg() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:1818/student/edit/${id}`)
+        .get(`http://localhost:1818/student/getbyid/${id}`)
         .then((response) => {
           setFormData(response.data);
         })
