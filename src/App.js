@@ -6,6 +6,9 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Home from "./components/Home";
 import Hello from "./components/Hello";
+
+import SubjectEnty from "./components/subject/Entry";
+import ResultEntry from "./components/result/Entry";
 import {
   BrowserRouter as Router,
   Routes,
@@ -28,6 +31,12 @@ function App() {
         <Route path="/register" element={<StudentReg />}></Route>
         <Route path="/register/:id" element={<StudentReg />}></Route>
         <Route path="/hello" element={<Hello />}></Route>
+
+        {/* Subject ENtry */}
+        <Route path="/subject/register" element={<SubjectEnty />}></Route>
+
+        {/* Result  */}
+        <Route path="/result/register" element={<ResultEntry />}></Route>
       </Routes>
     </Router>
   );
