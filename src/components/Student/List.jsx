@@ -8,26 +8,28 @@ import Table from "../HOC/Table";
 
 export default function List(params) {
   const {
-    data: results,
+    data: students,
     loading,
     error,
-  } = useFetchData("http://localhost:1818/result/list");
+  } = useFetchData("http://localhost:1818/student/list");
 
   const { handleDelete, loading: crudLoading, error: crudError } = useCRUD();
   const navigate = useNavigate();
 
   const columns = [
-    { field: "studentId", label: "Student Name" },
-    { field: "subjectId", label: "Subject Name" },
-    { field: "marks", label: "Marks" },
+    { field: "name", label: "Student Name" },
+    { field: "email", label: "Email" },
+    { field: "gender", label: "Gender" },
+    { field: "phonenumber", label: "Phone Number" },
+    { field: "address", label: "Address" },
   ];
   const handleEdit = (id) => {
-    console.log("Edit exam:", id);
-    navigate(`/result/entry/${id}`);
+    console.log("Edit student:", id);
+    navigate(`/student/entry/${id}`);
   };
   const handleAddNew = () => {
-    console.log("Add new exam");
-    navigate(`/result/entry`);
+    console.log("Add new student");
+    navigate(`/student/entry`);
   };
 
   if (loading) {
@@ -39,13 +41,13 @@ export default function List(params) {
   return (
     <div className="container">
       <div className="table-container">
-        <h2>Exam List</h2>
+        <h2>Student List</h2>
         <button onClick={handleAddNew} className="tag-btn">
-          Add New Result
+          Add New Student
         </button>
         <Table
           columns={columns}
-          data={results}
+          data={students}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
         />

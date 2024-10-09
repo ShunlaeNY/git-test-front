@@ -10,8 +10,19 @@ body{
 .icon-btn{
   background-color: transparent;
   border: none;
-  padding: 0;
+  padding: 3px;
+  border-radius: 3px;
   margin: 0;
+}
+.icon-btn:hover{
+  background-color: #0088c4;
+}
+.icon-btn:hover i{
+  color: white;
+}
+.icon-wrap{
+  width: 16px;
+  height: 16px;
 }
 i{
   margin: 0;
@@ -116,4 +127,26 @@ span{
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+}
+.tag-btn{
+  justify-self: start;
+  padding: 8px 10px;
+  border-radius: 3px;
+  background-color: #0088c4;
+  border: 2px solid #ddd;
+  color: white;
+  margin-bottom: 20px;
+  align-self: flex-start;
+  cursor: pointer;
+}
+.tag-btn:hover{
+  border: 2px solid #0088c4;
+  background-color: #fff;
+  color: #0088c4;
+}
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

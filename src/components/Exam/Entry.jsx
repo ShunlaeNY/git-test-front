@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function StudentReg() {
+import { useCRUD } from "../HOC/useCRUD";
+import { useFetchData } from "../HOC/UseFetchData";
+
+export default function Entry() {
   const [formData, setFormData] = useState({
     name: "",
     subjectId: "",
     startDate: "",
     endDate: "",
   });
-  const [subjectList, setSubjectList] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(""); // New state for error messages
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [errorMessage, setErrorMessage] = useState(""); // New state for error messages
+  const [subjectList, setSubjectList] = useState([]);
   // Fetch data from the subject table
   useEffect(() => {
     axios
@@ -26,19 +28,17 @@ export default function StudentReg() {
       });
   }, []);
 
-  // Fetch student data if ID is provided
+  const { handleCreate, handleEdit, loading, error } = useCRUD();
+
+  // Fetch student data if id is provided
+  const { data: studentData } = useFetchData(
+    id ? `http:localhost:1818/student/getbyId/${id}` : null
+  );
   useEffect(() => {
-    if (id) {
-      axios
-        .get(`http://localhost:1818/exam/getbyid/${id}`)
-        .then((response) => {
-          setFormData(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching exam data:", error);
-        });
+    if (studentData) {
+      setFormData(studentData);
     }
-  }, [id]);
+  }, [studentData]);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -52,28 +52,22 @@ export default function StudentReg() {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // Validate date input
     if (formData.startDate > formData.endDate) {
       setErrorMessage("End Date cannot be earlier than Start Date.");
       return;
     }
-
     setErrorMessage(""); // Clear any previous errors
+    console.log("Form Submitted:", formData);
 
     const url = id
-      ? `http://localhost:1818/exam/edit/${id}`
-      : "http://localhost:1818/exam/add";
-    const method = id ? "put" : "post";
-    axios[method](url, formData)
-      .then((response) => {
-        console.log("Student added/updated successfully:", response.data);
-        navigate("/students");
-      })
-      .catch((error) => {
-        console.error("Error adding/updating student:", error);
-        setErrorMessage("An error occurred while submitting the form.");
-      });
+      ? `http://localhost:1818/student/edit/${id}`
+      : "http://localhost:1818/student/add";
+    if (id) {
+      handleEdit(url, id, formData).then(() => navigate("/student/list"));
+    } else {
+      handleCreate(url, formData).then(() => navigate("/student/list"));
+    }
   };
 
   // Handle form clear/reset
@@ -87,10 +81,14 @@ export default function StudentReg() {
     setErrorMessage(""); // Clear any error message
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred: {error.message}</div>;
+
   return (
     <div className="form-container">
       <h1>{id ? "Exam Data Update Form" : "Exam Data Registration Form"}</h1>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} {/* Error message */}
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}{" "}
+      {/* Error message */}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Exam Name:</label>

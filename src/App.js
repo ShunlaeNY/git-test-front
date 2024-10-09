@@ -1,16 +1,17 @@
 import logo from "./logo.svg";
 import "./App.css";
-import StudentList from "./components/StudentList";
-import StudentReg from "./components/StudentReg";
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
+import StudentList from "./components/Student/List";
+import StudentEntry from "./components/Student/Entry";
+// import Login from "./components/auth/Login";
+// import Register from "./components/auth/Register";
 import ExamList from "./components/Exam/List";
 import ExamEntry from "./components/Exam/Entry";
 import Home from "./components/Home";
-import Hello from "./components/Hello";
 
-import SubjectEnty from "./components/subject/Entry";
-import ResultEntry from "./components/result/Entry";
+import SubjectList from "./components/Subject/List";
+import SubjectEntry from "./components/Subject/Entry";
+import ResultList from "./components/Result/List";
+import ResultEntry from "./components/Result/Entry";
 import {
   BrowserRouter as Router,
   Routes,
@@ -24,22 +25,29 @@ function App() {
     <Router>
       <div className="link-container">
         <a href="/">Home</a>
-        <a href="/students">StudentList</a>
-        <a href="/register">Student Register</a>
+        <a href="/student/list">Students</a>
         <a href="/exam/list">Exams</a>
+        <a href="/subject/list">Subjects</a>
+        <a href="/result/list">Results</a>
       </div>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/students" element={<StudentList />}></Route>
-        <Route path="/register" element={<StudentReg />}></Route>
-        <Route path="/register/:id" element={<StudentReg />}></Route>
-        <Route path="/hello" element={<Hello />}></Route>
+        {/* Student */}
+        <Route path="/student/list" element={<StudentList />}></Route>
+        <Route path="/student/entry" element={<StudentEntry />}></Route>
+        <Route path="/student/entry/:id" element={<StudentEntry />}></Route>
 
-        {/* Subject ENtry */}
-        <Route path="/subject/register" element={<SubjectEnty />}></Route>
+        {/* Subject */}
+        <Route path="/subject/list" element={<SubjectList />}></Route>
+        <Route path="/subject/entry" element={<SubjectEntry />}></Route>
+        <Route path="/subject/entry/:id" element={<SubjectEntry />}></Route>
 
         {/* Result  */}
-        <Route path="/result/register" element={<ResultEntry />}></Route>
+        <Route path="/result/list" element={<ResultList />}></Route>
+        <Route path="/result/entry" element={<ResultEntry />}></Route>
+        <Route path="/result/entry/:id" element={<ResultEntry />}></Route>
+
+        {/* Exam */}
         <Route path="/exam/list" element={<ExamList />}></Route>
         <Route path="/exam/entry" element={<ExamEntry />}></Route>
         <Route path="/exam/entry/:id" element={<ExamEntry />}></Route>

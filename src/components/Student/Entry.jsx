@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-export default function StudentReg() {
+
+import { useCRUD } from "../HOC/useCRUD";
+import { useFetchData } from "../HOC/UseFetchData";
+
+export default function Entry() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -12,19 +16,17 @@ export default function StudentReg() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const { handleCreate, handleEdit, loading, error } = useCRUD();
+
   // Fetch student data if id is provided
+  const { data: studentData } = useFetchData(
+    id ? `http:localhost:1818/student/getbyId/${id}` : null
+  );
   useEffect(() => {
-    if (id) {
-      axios
-        .get(`http://localhost:1818/student/getbyid/${id}`)
-        .then((response) => {
-          setFormData(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching student:", error);
-        });
+    if (studentData) {
+      setFormData(studentData);
     }
-  }, [id]);
+  }, [studentData]);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -43,15 +45,11 @@ export default function StudentReg() {
     const url = id
       ? `http://localhost:1818/student/edit/${id}`
       : "http://localhost:1818/student/add";
-    const method = id ? "put" : "post";
-    axios[method](url, formData)
-      .then((response) => {
-        console.log("Student added successfully:", response.data);
-        navigate("/students");
-      })
-      .catch((error) => {
-        console.error("Error adding student:", error);
-      });
+    if (id) {
+      handleEdit(url, id, formData).then(() => navigate("/student/list"));
+    } else {
+      handleCreate(url, formData).then(() => navigate("/student/list"));
+    }
   };
 
   // Handle form clear/reset
@@ -64,6 +62,9 @@ export default function StudentReg() {
       address: "",
     });
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred: {error.message}</div>;
 
   return (
     <div className="form-container">
