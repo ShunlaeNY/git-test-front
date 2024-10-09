@@ -16,7 +16,7 @@ export default function Entry() {
 
   // Fetch student data if id is provided
   const { data: subjectData } = useFetchData(
-    id ? `http:localhost:1818/subject/getbyId/${id}` : null
+    id ? `http://localhost:1818/subject/getbyid/${id}` : null
   );
   useEffect(() => {
     if (subjectData) {
@@ -39,7 +39,7 @@ export default function Entry() {
     console.log("Form Submitted:", formData);
     // Add your form submission logic here, like sending data to an API
     const url = id
-      ? `http://localhost:1818/subject/edit/${id}`
+      ? `http://localhost:1818/subject/edit`
       : "http://localhost:1818/subject/add";
     if (id) {
       handleEdit(url, id, formData).then(() => navigate("/subject/list"));

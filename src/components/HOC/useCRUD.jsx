@@ -4,6 +4,7 @@ import axios from "axios";
 export function useCRUD() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [deleteStatus, setDeleteStatus] = useState(false); // State to track delete status
 
   // Create new record
   const handleCreate = async (url, newData) => {
@@ -39,6 +40,7 @@ export function useCRUD() {
 
   // Delete record
   const handleDelete = async (url, id) => {
+    setDeleteStatus(true); // Set deleteStatus to true when deleting
     setLoading(true);
     setError(null);
     try {
@@ -49,8 +51,16 @@ export function useCRUD() {
       setError(err);
     } finally {
       setLoading(false);
+      setDeleteStatus(false); // Reset deleteStatus after operation is done
     }
   };
 
-  return { handleCreate, handleEdit, handleDelete, loading, error };
+  return {
+    handleCreate,
+    handleEdit,
+    handleDelete,
+    loading,
+    error,
+    deleteStatus,
+  };
 }

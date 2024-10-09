@@ -8,12 +8,16 @@ import Table from "../HOC/Table";
 
 export default function List(params) {
   const {
+    handleDelete,
+    loading: crudLoading,
+    error: crudError,
+    deleteStatus,
+  } = useCRUD();
+  const {
     data: subjects,
     loading,
     error,
-  } = useFetchData("http://localhost:1818/subject/list");
-
-  const { handleDelete, loading: crudLoading, error: crudError } = useCRUD();
+  } = useFetchData("http://localhost:1818/subject/list", deleteStatus);
   const navigate = useNavigate();
 
   const columns = [{ field: "name", label: "Subject Name" }];
@@ -24,6 +28,11 @@ export default function List(params) {
   const handleAddNew = () => {
     console.log("Add new subject");
     navigate(`/subject/entry`);
+  };
+
+  const handleDeleteSubject = async (id) => {
+    const url = `http://localhost:1818/subject/delete`;
+    await handleDelete(url, id); // Trigger the delete action
   };
 
   if (loading) {
@@ -43,7 +52,7 @@ export default function List(params) {
           columns={columns}
           data={subjects}
           handleEdit={handleEdit}
-          handleDelete={handleDelete}
+          handleDelete={handleDeleteSubject}
         />
       </div>
     </div>

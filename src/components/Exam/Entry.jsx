@@ -32,7 +32,7 @@ export default function Entry() {
 
   // Fetch student data if id is provided
   const { data: studentData } = useFetchData(
-    id ? `http:localhost:1818/student/getbyId/${id}` : null
+    id ? `http://localhost:1818/exam/getbyid/${id}` : null
   );
   useEffect(() => {
     if (studentData) {
@@ -61,12 +61,12 @@ export default function Entry() {
     console.log("Form Submitted:", formData);
 
     const url = id
-      ? `http://localhost:1818/student/edit/${id}`
-      : "http://localhost:1818/student/add";
+      ? `http://localhost:1818/exam/edit`
+      : "http://localhost:1818/exam/add";
     if (id) {
-      handleEdit(url, id, formData).then(() => navigate("/student/list"));
+      handleEdit(url, id, formData).then(() => navigate("/exam/list"));
     } else {
-      handleCreate(url, formData).then(() => navigate("/student/list"));
+      handleCreate(url, formData).then(() => navigate("/exam/list"));
     }
   };
 

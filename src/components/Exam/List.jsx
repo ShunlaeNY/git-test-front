@@ -8,12 +8,16 @@ import Table from "../HOC/Table";
 
 export default function List(params) {
   const {
+    handleDelete,
+    loading: crudLoading,
+    error: crudError,
+    deleteStatus,
+  } = useCRUD();
+  const {
     data: exams,
     loading,
     error,
-  } = useFetchData("http://localhost:1818/exam/list");
-
-  const { handleDelete, loading: crudLoading, error: crudError } = useCRUD();
+  } = useFetchData("http://localhost:1818/exam/list", deleteStatus);
   const navigate = useNavigate();
 
   const columns = [
@@ -29,6 +33,11 @@ export default function List(params) {
   const handleAddNew = () => {
     console.log("Add new exam");
     navigate(`/exam/entry`);
+  };
+
+  const handleDeleteExam = async (id) => {
+    const url = `http://localhost:1818/exam/delete`;
+    await handleDelete(url, id); // Trigger the delete action
   };
 
   if (loading) {
@@ -48,7 +57,7 @@ export default function List(params) {
           columns={columns}
           data={exams}
           handleEdit={handleEdit}
-          handleDelete={handleDelete}
+          handleDelete={handleDeleteExam}
         />
       </div>
     </div>

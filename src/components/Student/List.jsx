@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useFetchData } from "../HOC/UseFetchData";
@@ -8,12 +7,16 @@ import Table from "../HOC/Table";
 
 export default function List(params) {
   const {
+    handleDelete,
+    loading: crudLoading,
+    error: crudError,
+    deleteStatus,
+  } = useCRUD();
+  const {
     data: students,
     loading,
     error,
-  } = useFetchData("http://localhost:1818/student/list");
-
-  const { handleDelete, loading: crudLoading, error: crudError } = useCRUD();
+  } = useFetchData("http://localhost:1818/student/list", deleteStatus);
   const navigate = useNavigate();
 
   const columns = [
@@ -23,13 +26,20 @@ export default function List(params) {
     { field: "phonenumber", label: "Phone Number" },
     { field: "address", label: "Address" },
   ];
+
   const handleEdit = (id) => {
     console.log("Edit student:", id);
     navigate(`/student/entry/${id}`);
   };
+
   const handleAddNew = () => {
     console.log("Add new student");
     navigate(`/student/entry`);
+  };
+
+  const handleDeleteStudent = async (id) => {
+    const url = `http://localhost:1818/student/delete`;
+    await handleDelete(url, id); // Trigger the delete action
   };
 
   if (loading) {
@@ -38,6 +48,7 @@ export default function List(params) {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   return (
     <div className="container">
       <div className="table-container">
@@ -49,7 +60,7 @@ export default function List(params) {
           columns={columns}
           data={students}
           handleEdit={handleEdit}
-          handleDelete={handleDelete}
+          handleDelete={handleDeleteStudent}
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function useFetchData(url) {
+export function useFetchData(url, deleteStatus) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ export function useFetchData(url) {
         setError(error);
         setLoading(false);
       });
-  }, [url]);
+  }, [url, deleteStatus]); // Re-fetch data when deleteStatus changes
 
   return { data, loading, error };
 }

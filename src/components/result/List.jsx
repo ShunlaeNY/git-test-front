@@ -8,12 +8,18 @@ import Table from "../HOC/Table";
 
 export default function List(params) {
   const {
+    handleDelete,
+    loading: crudLoading,
+    error: crudError,
+    deleteStatus,
+  } = useCRUD();
+
+  const {
     data: results,
     loading,
     error,
-  } = useFetchData("http://localhost:1818/result/list");
+  } = useFetchData("http://localhost:1818/result/list", deleteStatus);
 
-  const { handleDelete, loading: crudLoading, error: crudError } = useCRUD();
   const navigate = useNavigate();
 
   const columns = [

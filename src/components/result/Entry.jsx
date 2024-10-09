@@ -44,7 +44,7 @@ export default function Entry() {
 
   // Fetch result data if id is provided
   const { data: resultData } = useFetchData(
-    id ? `http://localhost:1818/result/getbyId/${id}` : null
+    id ? `http://localhost:1818/result/getbyid/${id}` : null
   );
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function Entry() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const url = id
-      ? `http://localhost:1818/result/edit/${id}`
+      ? `http://localhost:1818/result/edit`
       : "http://localhost:1818/result/add";
     if (id) {
       handleEdit(url, id, formData).then(() => navigate("/result/list"));
